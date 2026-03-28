@@ -1383,7 +1383,7 @@ setInterval(() => {
 }, 4000);
 
 // ===== THREE.JS GLOBE =====
-let scene,camera,renderer,globe,markersArr=[],mouseDown=false,mouseX=0,mouseY=0,mouseDownX=0,mouseDownY=0,rotVelY=.0015,hoveredMarker=null,pulseTime=0,pulseRings=[];
+let scene,camera,renderer,globe,markersArr=[],mouseDown=false,mouseX=0,mouseY=0,mouseDownX=0,mouseDownY=0,rotVelY=.0015,hoveredMarker=null,pulseTime=0,pulseRings=[],globePaused=false;
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2();
 
 function latLngToVec3(lat,lng,r){const phi=(90-lat)*Math.PI/180,theta=(lng+180)*Math.PI/180;return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta))}
@@ -1447,7 +1447,8 @@ function initGlobe(){
     }
     mouseDown=false;
   });
-  canvas.addEventListener('mouseleave',()=>{mouseDown=false;document.getElementById('globe-tooltip').classList.remove('visible')});
+  canvas.addEventListener('mouseenter',()=>{globePaused=true});
+  canvas.addEventListener('mouseleave',()=>{mouseDown=false;globePaused=false;document.getElementById('globe-tooltip').classList.remove('visible')});
   // Scroll zoom — desktop only. On mobile, scroll should move the page.
   if(!isMobile){canvas.addEventListener('wheel',e=>{e.preventDefault();camera.position.z=Math.max(1.8,Math.min(5,camera.position.z+e.deltaY*.002))},{passive:false})}
   // Touch: track if horizontal drag (globe rotate) vs vertical scroll (page scroll)
@@ -1524,7 +1525,7 @@ function onGlobeMove(e){
 
 function animate(){
   requestAnimationFrame(animate);pulseTime+=.02;
-  if(!mouseDown){globe.rotation.y+=rotVelY;rotVelY*=.9995;if(Math.abs(rotVelY)<.0008)rotVelY=.0008}
+  if(!mouseDown&&!globePaused){globe.rotation.y+=rotVelY;rotVelY*=.9995;if(Math.abs(rotVelY)<.0008)rotVelY=.0008}
   pulseRings.forEach(r=>{r.material.opacity=.12+Math.sin(pulseTime*2)*.12;const s=1+Math.sin(pulseTime*2)*.2;r.scale.set(s,s,s)});
   const sp3=latLngToVec3(STRAIT_LAT,STRAIT_LNG,1.1),wp=sp3.clone();globe.localToWorld(wp);
   const camDir=new THREE.Vector3();camera.getWorldDirection(camDir);const label=document.getElementById('strait-label');
