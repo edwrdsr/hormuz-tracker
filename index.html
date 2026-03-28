@@ -32,8 +32,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .update-time span{color:var(--text-dim)}
 
 /* Nav tabs */
-.nav-tabs{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden}
-.nav-tab{background:var(--surface);border:none;color:var(--text-muted);padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;transition:all .2s;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+.nav-tabs{display:flex;border:1px solid var(--border);border-radius:5px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{background:var(--surface);border:none;color:var(--text-muted);padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;transition:all .2s;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
 .nav-tab:not(:last-child){border-right:1px solid var(--border)}
 .nav-tab:hover{color:var(--text)}
 .nav-tab.active{background:var(--text);color:var(--bg)}
@@ -258,7 +259,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 /* ===== REGIONAL IMPACT VIEW ===== */
 .regional-section{border-bottom:1px solid var(--border)}
-.regional-tabs{display:flex;border-bottom:1px solid var(--border)}
+.regional-tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.regional-tabs::-webkit-scrollbar{display:none}
 .regional-tab{flex:1;padding:14px 20px;background:var(--bg);border:none;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;border-bottom:2px solid transparent}
 .regional-tab:hover{color:var(--text);background:var(--surface)}
 .regional-tab.active{color:var(--text);border-bottom-color:var(--red);background:var(--surface)}
@@ -432,11 +434,24 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 }
 @media(max-width:700px){
   .header{padding:12px 16px;flex-direction:column;align-items:flex-start;gap:8px}
+  .header-right{width:100%;flex-direction:column;align-items:stretch;gap:8px}
+  .nav-tabs{width:100%;justify-content:flex-start}
+  .nav-tab{padding:6px 10px;font-size:9px}
   .metrics-strip{grid-template-columns:repeat(2,1fr)}.country-grid-wrap{padding:16px}
-  .country-grid{grid-template-columns:1fr}.filter-bar{padding:10px 16px}
-  .globe-section{height:420px}.history-grid{grid-template-columns:1fr}
+  .country-grid{grid-template-columns:1fr}.filter-bar{padding:10px 16px;flex-wrap:wrap;gap:8px}
+  .globe-section{height:300px}.globe-overlay-tl{max-width:200px;font-size:10px}
+  .history-grid{grid-template-columns:1fr}
   .feeds-grid{grid-template-columns:1fr}.methodology-page{padding:24px 16px}
   .share-bar{flex-wrap:wrap}
+  .oil-banner{padding:10px 12px;gap:12px;flex-direction:column;text-align:center}
+  .oil-price{font-size:28px}
+  .scenario-page{padding:20px 16px}
+  .calc-page{padding:20px 16px}
+  .calc-total-value{font-size:36px}
+  .regional-tabs{flex-wrap:wrap;gap:4px}
+  .sidebar-section{padding:14px 12px}
+  .footer-note{padding:12px 16px}
+  .country-detail{width:100%;min-width:0}
 }
 </style>
 </head>
