@@ -1,0 +1,16 @@
+name = "hormuz-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# KV namespace for caching — create in Cloudflare dashboard first
+# Then paste the ID below
+[[kv_namespaces]]
+binding = "CACHE"
+id = "PASTE_YOUR_KV_NAMESPACE_ID_HERE"
+
+# Auto-refresh every 5 minutes
+[triggers]
+crons = ["*/5 * * * *"]
+
+# Custom domain route (set up after deploying)
+# routes = [{ pattern = "api.hormuztracker.org/*", zone_name = "hormuztracker.org" }]
