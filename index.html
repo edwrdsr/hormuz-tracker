@@ -1021,6 +1021,37 @@ document.querySelectorAll('.nav-tab').forEach(t=>t.addEventListener('click',()=>
   document.getElementById('page-'+t.dataset.page).classList.add('active');
   if(t.dataset.page==='dashboard'&&renderer) onResize();
   history.replaceState(null,null,'#'+t.dataset.page);
+
+  // Reset state on tab switch
+  // Close country detail panel
+  const detail=document.getElementById('country-detail');
+  if(detail) detail.classList.remove('open');
+  // Reset country card filters
+  aF='all'; aT='all'; sQ='';
+  const searchEl=document.getElementById('search');
+  if(searchEl) searchEl.value='';
+  document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.remove('active');if(b.dataset.filter==='all')b.classList.add('active')});
+  document.querySelectorAll('[data-type]').forEach(b=>{b.classList.remove('active');if(b.dataset.type==='all')b.classList.add('active')});
+  if(typeof renderCards==='function') renderCards();
+  // Reset regional tabs to first
+  document.querySelectorAll('.regional-tab').forEach(rt=>rt.classList.remove('active'));
+  document.querySelectorAll('.regional-body').forEach(rb=>rb.classList.remove('active'));
+  const firstRegTab=document.querySelector('.regional-tab');
+  if(firstRegTab){firstRegTab.classList.add('active');document.getElementById('region-'+firstRegTab.dataset.region).classList.add('active')}
+  // Reset scenario slider to default (30 days)
+  const scenarioSlider=document.getElementById('scenario-days');
+  if(scenarioSlider){scenarioSlider.value=30;if(typeof updateScenario==='function') updateScenario(30)}
+  // Reset calculator to defaults
+  const calcRegion=document.getElementById('calc-region');
+  const calcCommute=document.getElementById('calc-commute');
+  const calcHousehold=document.getElementById('calc-household');
+  if(calcRegion) calcRegion.value='us-avg';
+  if(calcCommute) calcCommute.value=120;
+  if(calcHousehold) calcHousehold.value=2;
+  if(typeof updateCalculator==='function') updateCalculator();
+  // Close about modal if open
+  const aboutOverlay=document.getElementById('about-overlay');
+  if(aboutOverlay) aboutOverlay.classList.remove('open');
 }));
 
 // Load from hash
