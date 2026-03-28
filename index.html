@@ -284,7 +284,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .regional-body.active{display:block}
 .regional-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 .regional-card{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:6px}
-.regional-card-icon{font-size:20px;margin-bottom:6px}
+.regional-card-icon{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:4px 8px;margin-bottom:8px;display:inline-block;line-height:1.2}
 .regional-card-title{font-family:'Source Serif 4',serif;font-size:14px;font-weight:700;margin-bottom:4px}
 .regional-card-text{font-size:12px;color:var(--text-dim);line-height:1.6}
 .regional-summary{font-size:13px;color:var(--text-dim);line-height:1.7;margin-bottom:16px}
@@ -430,7 +430,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 /* Impact Box */
 .impact-box{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
 .impact-item{background:var(--bg);padding:16px 20px;display:flex;align-items:flex-start;gap:12px}
-.impact-icon{font-size:24px;line-height:1;flex-shrink:0;margin-top:2px;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;-webkit-text-size-adjust:none}
+.impact-icon{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:6px 8px;flex-shrink:0;margin-top:2px;text-align:center;min-width:32px;line-height:1.2}
 .impact-content{}
 .impact-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px}
 .impact-headline{font-family:'Source Serif 4',serif;font-size:15px;font-weight:700;line-height:1.25;margin-bottom:3px}
@@ -439,7 +439,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @media(max-width:700px){
   .impact-box{grid-template-columns:1fr}
   .impact-item{padding:12px 14px;gap:10px}
-  .impact-icon{font-size:20px}
+  .impact-icon{font-size:8px;padding:5px 6px;min-width:28px}
   .impact-headline{font-size:13px}
   .impact-detail{font-size:11px;line-height:1.5}
   .cascade-heading{padding:16px 16px 6px}
@@ -626,37 +626,37 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="regional-body active" id="region-us">
       <div class="regional-summary">The US is insulated from the worst energy impacts thanks to domestic production, but the crisis is hitting through <strong>fertilizer costs, gas prices, and supply chain disruption</strong>. The timing — mid-planting season — makes the agricultural exposure uniquely dangerous.</div>
       <div class="regional-grid">
-        <div class="regional-card"><div class="regional-card-icon">⛽</div><div class="regional-card-title">Gas prices up ~25% and climbing</div><div class="regional-card-text">National average significantly above pre-war levels. Pain is real but manageable — the US isn't rationing. Could rise further if closure persists.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🌽</div><div class="regional-card-title">Midwest planting season at risk</div><div class="regional-card-text">Urea at NOLA hub +28%. Saudi Arabia is the #1 US phosphate supplier — blocked. The Farm Bureau warned Trump directly: "The U.S. risks a shortfall in crops." Grocery impact arrives by summer.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">💻</div><div class="regional-card-title">Helium = semiconductor risk</div><div class="regional-card-text">1/3 of global helium transits Hormuz. Helium is critical for chip fabrication. If shortages hit, expect delays and price increases on electronics, cars, and medical devices.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🏦</div><div class="regional-card-title">Markets volatile, inflation rising</div><div class="regional-card-text">Dow dropped 400+ points on Day 3. Oil prices swing 10%+ on headlines. Inflation was cooling — this crisis reignites it. The Fed's rate-cut timeline is now uncertain.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">OIL</div><div class="regional-card-title">Gas prices up ~25% and climbing</div><div class="regional-card-text">National average significantly above pre-war levels. Pain is real but manageable — the US isn't rationing. Could rise further if closure persists.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">AGR</div><div class="regional-card-title">Midwest planting season at risk</div><div class="regional-card-text">Urea at NOLA hub +28%. Saudi Arabia is the #1 US phosphate supplier — blocked. The Farm Bureau warned Trump directly: "The U.S. risks a shortfall in crops." Grocery impact arrives by summer.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">SEMI</div><div class="regional-card-title">Helium = semiconductor risk</div><div class="regional-card-text">1/3 of global helium transits Hormuz. Helium is critical for chip fabrication. If shortages hit, expect delays and price increases on electronics, cars, and medical devices.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">MKT</div><div class="regional-card-title">Markets volatile, inflation rising</div><div class="regional-card-text">Dow dropped 400+ points on Day 3. Oil prices swing 10%+ on headlines. Inflation was cooling — this crisis reignites it. The Fed's rate-cut timeline is now uncertain.</div></div>
       </div>
     </div>
     <div class="regional-body" id="region-europe">
       <div class="regional-summary">Europe is experiencing a <strong>second energy crisis in four years</strong>. Gas storage was already low from a harsh winter. The loss of Qatari LNG through the strait, on top of reduced Russian supply, is pushing the continent toward industrial contraction and inflation.</div>
       <div class="regional-grid">
-        <div class="regional-card"><div class="regional-card-icon">🔥</div><div class="regional-card-title">Gas prices roughly doubled</div><div class="regional-card-text">European gas benchmarks approximately doubled from pre-war levels. Storage below 30% — the lowest since 2022. 12-14% of Europe's LNG came through Hormuz. The summer refill season is now at serious risk.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🏭</div><div class="regional-card-title">Industry adding 30% surcharges</div><div class="regional-card-text">Chemical and steel manufacturers can't absorb energy costs. UK inflation expected to breach 5%. ECB postponed planned rate cuts. Energy-intensive economies face technical recession.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">✈️</div><div class="regional-card-title">Jet fuel more than doubled</div><div class="regional-card-text">Airlines cutting routes and adding surcharges. Budget carriers are most exposed. Summer travel costs will be significantly higher than booked prices suggest.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🍞</div><div class="regional-card-title">Food prices climbing again</div><div class="regional-card-text">Fertilizer disruption + energy costs = higher farm input prices across the continent. Europe imports significant ammonia — prices will flow through to bread, dairy, and meat by Q3.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">GAS</div><div class="regional-card-title">Gas prices roughly doubled</div><div class="regional-card-text">European gas benchmarks approximately doubled from pre-war levels. Storage below 30% — the lowest since 2022. 12-14% of Europe's LNG came through Hormuz. The summer refill season is now at serious risk.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">IND</div><div class="regional-card-title">Industry adding 30% surcharges</div><div class="regional-card-text">Chemical and steel manufacturers can't absorb energy costs. UK inflation expected to breach 5%. ECB postponed planned rate cuts. Energy-intensive economies face technical recession.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">AIR</div><div class="regional-card-title">Jet fuel more than doubled</div><div class="regional-card-text">Airlines cutting routes and adding surcharges. Budget carriers are most exposed. Summer travel costs will be significantly higher than booked prices suggest.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">FOOD</div><div class="regional-card-title">Food prices climbing again</div><div class="regional-card-text">Fertilizer disruption + energy costs = higher farm input prices across the continent. Europe imports significant ammonia — prices will flow through to bread, dairy, and meat by Q3.</div></div>
       </div>
     </div>
     <div class="regional-body" id="region-asia">
       <div class="regional-summary">Asia is <strong>ground zero</strong>. 84% of Hormuz oil goes to Asia. Countries are rationing fuel, closing schools, mandating work-from-home, and releasing strategic reserves. For hundreds of millions, this isn't an economic story — it's a daily survival question.</div>
       <div class="regional-grid">
-        <div class="regional-card"><div class="regional-card-icon">🏫</div><div class="regional-card-title">Schools closed, offices shut</div><div class="regional-card-text">Pakistan, Bangladesh, Philippines, Vietnam, Sri Lanka have all imposed 4-day work weeks, WFH mandates, or school closures to conserve fuel. Thailand told workers to take the stairs.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🛢️</div><div class="regional-card-title">Rationing is real</div><div class="regional-card-text">Sri Lanka: QR-code fuel system, 15L/week per car. Bangladesh: military controls oil depots. Myanmar: alternating driving days. Vietnam has ~20 days of reserves left.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🍳</div><div class="regional-card-title">Cooking gas running out</div><div class="regional-card-text">India: LPG queues and shortages nationwide. 60% of India's LPG imports pass through Hormuz. Restaurants closing. Refineries ordered to max out domestic LPG production.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">📉</div><div class="regional-card-title">Japan/Korea burning reserves fast</div><div class="regional-card-text">Japan authorized its largest-ever reserve release (80M barrels). South Korea imposed fuel price caps for the first time in 30 years. Both have months of buffer — but the clock is running.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">GOV</div><div class="regional-card-title">Schools closed, offices shut</div><div class="regional-card-text">Pakistan, Bangladesh, Philippines, Vietnam, Sri Lanka have all imposed 4-day work weeks, WFH mandates, or school closures to conserve fuel. Thailand told workers to take the stairs.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">FUEL</div><div class="regional-card-title">Rationing is real</div><div class="regional-card-text">Sri Lanka: QR-code fuel system, 15L/week per car. Bangladesh: military controls oil depots. Myanmar: alternating driving days. Vietnam has ~20 days of reserves left.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">LPG</div><div class="regional-card-title">Cooking gas running out</div><div class="regional-card-text">India: LPG queues and shortages nationwide. 60% of India's LPG imports pass through Hormuz. Restaurants closing. Refineries ordered to max out domestic LPG production.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">RSV</div><div class="regional-card-title">Japan/Korea burning reserves fast</div><div class="regional-card-text">Japan authorized its largest-ever reserve release (80M barrels). South Korea imposed fuel price caps for the first time in 30 years. Both have months of buffer — but the clock is running.</div></div>
       </div>
     </div>
     <div class="regional-body" id="region-mena">
       <div class="regional-summary">The Gulf states are the epicenter — both as <strong>blocked producers unable to export</strong> and as nations that import 70-90% of their food through the strait. The humanitarian situation in Yemen, Gaza, Lebanon, and Syria was already dire. It's now catastrophic.</div>
       <div class="regional-grid">
-        <div class="regional-card"><div class="regional-card-icon">🚫</div><div class="regional-card-title">Producers can't produce</div><div class="regional-card-text">Iraq declared force majeure. Saudi cut production 20%. Kuwait shut fields. Qatar's LNG is stranded. Storage is full, wells are shutting in. Oil wealth means nothing if you can't export it.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🍞</div><div class="regional-card-title">70% of food imports blocked</div><div class="regional-card-text">Gulf states import almost everything they eat through Hormuz. Food prices up 40-120% in the UAE. Qatar has no alternative ports. Retailers airlifting staples. This is a food emergency for 50M+ people.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">💧</div><div class="regional-card-title">Desalination plants struck</div><div class="regional-card-text">Iranian strikes hit infrastructure including desalination plants — the source of drinking water for much of the Gulf. This has shifted from economic crisis toward potential humanitarian catastrophe.</div></div>
-        <div class="regional-card"><div class="regional-card-icon">🆘</div><div class="regional-card-title">Yemen, Gaza, Lebanon, Syria</div><div class="regional-card-text">17M food-insecure in Yemen. Flour +270% in Gaza. 874K in crisis-level food insecurity in Lebanon. 67K+ displaced returning to Syria with nothing. All pre-existing crises dramatically worsened.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">HALT</div><div class="regional-card-title">Producers can't produce</div><div class="regional-card-text">Iraq declared force majeure. Saudi cut production 20%. Kuwait shut fields. Qatar's LNG is stranded. Storage is full, wells are shutting in. Oil wealth means nothing if you can't export it.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">FOOD</div><div class="regional-card-title">70% of food imports blocked</div><div class="regional-card-text">Gulf states import almost everything they eat through Hormuz. Food prices up 40-120% in the UAE. Qatar has no alternative ports. Retailers airlifting staples. This is a food emergency for 50M+ people.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">H2O</div><div class="regional-card-title">Desalination plants struck</div><div class="regional-card-text">Iranian strikes hit infrastructure including desalination plants — the source of drinking water for much of the Gulf. This has shifted from economic crisis toward potential humanitarian catastrophe.</div></div>
+        <div class="regional-card"><div class="regional-card-icon">AID</div><div class="regional-card-title">Yemen, Gaza, Lebanon, Syria</div><div class="regional-card-text">17M food-insecure in Yemen. Flour +270% in Gaza. 874K in crisis-level food insecurity in Lebanon. 67K+ displaced returning to Syria with nothing. All pre-existing crises dramatically worsened.</div></div>
       </div>
     </div>
   </div>
@@ -677,7 +677,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     </div>
     <div class="impact-box">
       <div class="impact-item">
-        <div class="impact-icon">⛽</div>
+        <div class="impact-icon">OIL</div>
         <div class="impact-content">
           <div class="impact-label">Gas prices</div>
           <div class="impact-headline">Gas up ~25% from pre-war</div>
@@ -685,7 +685,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">✈️</div>
+        <div class="impact-icon">AIR</div>
         <div class="impact-content">
           <div class="impact-label">Flights</div>
           <div class="impact-headline">Jet fuel more than doubled</div>
@@ -693,7 +693,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">🏭</div>
+        <div class="impact-icon">NRG</div>
         <div class="impact-content">
           <div class="impact-label">Energy bills</div>
           <div class="impact-headline">EU gas benchmarks doubled</div>
@@ -701,7 +701,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">🚢</div>
+        <div class="impact-icon">SEA</div>
         <div class="impact-content">
           <div class="impact-label">Shipping</div>
           <div class="impact-headline">1,000+ ships stranded</div>
@@ -719,7 +719,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     </div>
     <div class="impact-box">
       <div class="impact-item">
-        <div class="impact-icon">🌾</div>
+        <div class="impact-icon">AGR</div>
         <div class="impact-content">
           <div class="impact-label">Food supply</div>
           <div class="impact-headline">Fertilizer up ~30% and rising</div>
@@ -727,7 +727,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">📱</div>
+        <div class="impact-icon">TECH</div>
         <div class="impact-content">
           <div class="impact-label">Electronics</div>
           <div class="impact-headline">Helium + plastics disrupted</div>
@@ -735,7 +735,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">💊</div>
+        <div class="impact-icon">MED</div>
         <div class="impact-content">
           <div class="impact-label">Pharma & medical</div>
           <div class="impact-headline">Petrochemical supply strain</div>
@@ -743,7 +743,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">👕</div>
+        <div class="impact-icon">MFG</div>
         <div class="impact-content">
           <div class="impact-label">Clothing & textiles</div>
           <div class="impact-headline">Asian garment industry at risk</div>
@@ -761,7 +761,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     </div>
     <div class="impact-box" style="border-bottom:none">
       <div class="impact-item">
-        <div class="impact-icon">📉</div>
+        <div class="impact-icon">GDP</div>
         <div class="impact-content">
           <div class="impact-label">Global economy</div>
           <div class="impact-headline">GDP −2.9% (Dallas Fed est.)</div>
@@ -769,7 +769,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">🍞</div>
+        <div class="impact-icon">FOOD</div>
         <div class="impact-content">
           <div class="impact-label">Food crisis</div>
           <div class="impact-headline">50M+ at risk in Gulf alone</div>
@@ -777,7 +777,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">⚡</div>
+        <div class="impact-icon">PWR</div>
         <div class="impact-content">
           <div class="impact-label">Energy transition</div>
           <div class="impact-headline">Forced acceleration</div>
@@ -785,7 +785,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         </div>
       </div>
       <div class="impact-item">
-        <div class="impact-icon">🌐</div>
+        <div class="impact-icon">GEO</div>
         <div class="impact-content">
           <div class="impact-label">Geopolitical shift</div>
           <div class="impact-headline">China & Russia gain leverage</div>
