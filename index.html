@@ -1010,7 +1010,8 @@ const countries = [
 
 const STRAIT_LAT=26.56,STRAIT_LNG=56.25;
 const levelColors={critical:0xff2222,severe:0xff6622,high:0xffaa00,elevated:0xffd53e,monitoring:0x4a9eff};
-const levelSizes={critical:0.028,severe:0.022,high:0.018,elevated:0.015,monitoring:0.012};
+const isMobile=window.innerWidth<=700;
+const levelSizes=isMobile?{critical:0.038,severe:0.032,high:0.026,elevated:0.022,monitoring:0.018}:{critical:0.028,severe:0.022,high:0.018,elevated:0.015,monitoring:0.012};
 
 // ===== NAVIGATION =====
 document.querySelectorAll('.nav-tab').forEach(t=>t.addEventListener('click',()=>{
@@ -1447,21 +1448,53 @@ function initGlobe(){
     mouseDown=false;
   });
   canvas.addEventListener('mouseleave',()=>{mouseDown=false;document.getElementById('globe-tooltip').classList.remove('visible')});
-  canvas.addEventListener('wheel',e=>{e.preventDefault();camera.position.z=Math.max(1.8,Math.min(5,camera.position.z+e.deltaY*.002))},{passive:false});
-  canvas.addEventListener('touchstart',e=>{if(e.touches.length===1){mouseDown=true;mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY;mouseDownX=e.touches[0].clientX;mouseDownY=e.touches[0].clientY;e.preventDefault()}},{passive:false});
-  canvas.addEventListener('touchmove',e=>{if(mouseDown&&e.touches.length===1){const dx=e.touches[0].clientX-mouseX,dy=e.touches[0].clientY-mouseY;globe.rotation.y+=dx*.005;globe.rotation.x=Math.max(-1.2,Math.min(1.2,globe.rotation.x+dy*.005));rotVelY=dx*.002;mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY;e.preventDefault()}},{passive:false});
+  // Scroll zoom — desktop only. On mobile, scroll should move the page.
+  if(!isMobile){canvas.addEventListener('wheel',e=>{e.preventDefault();camera.position.z=Math.max(1.8,Math.min(5,camera.position.z+e.deltaY*.002))},{passive:false})}
+  // Touch: track if horizontal drag (globe rotate) vs vertical scroll (page scroll)
+  let touchIsHorizontal=false,touchStartTime=0;
+  canvas.addEventListener('touchstart',e=>{
+    if(e.touches.length===1){
+      mouseDown=true;touchIsHorizontal=false;touchStartTime=Date.now();
+      mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY;
+      mouseDownX=e.touches[0].clientX;mouseDownY=e.touches[0].clientY;
+      // Don't preventDefault here — let browser decide scroll vs drag
+    }
+  },{passive:true});
+  canvas.addEventListener('touchmove',e=>{
+    if(!mouseDown||e.touches.length!==1) return;
+    const dx=e.touches[0].clientX-mouseDownX,dy=e.touches[0].clientY-mouseDownY;
+    // Determine intent: horizontal = rotate globe, vertical = scroll page
+    if(!touchIsHorizontal && Math.abs(dx)+Math.abs(dy)>10){
+      touchIsHorizontal=Math.abs(dx)>Math.abs(dy);
+    }
+    if(touchIsHorizontal){
+      // Rotate globe
+      const mdx=e.touches[0].clientX-mouseX,mdy=e.touches[0].clientY-mouseY;
+      globe.rotation.y+=mdx*.005;
+      globe.rotation.x=Math.max(-1.2,Math.min(1.2,globe.rotation.x+mdy*.005));
+      rotVelY=mdx*.002;
+      mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY;
+      e.preventDefault(); // Only prevent scroll when rotating
+    }
+    // If vertical, do nothing — browser handles page scroll naturally
+  },{passive:false});
   canvas.addEventListener('touchend',e=>{
     const dist=Math.abs(mouseX-mouseDownX)+Math.abs(mouseY-mouseDownY);
-    if(dist<10){
-      // Tap on mobile — check for marker hit
+    const tapDuration=Date.now()-touchStartTime;
+    if(dist<15 && tapDuration<300){
+      // Quick tap — check for marker hit with expanded hit radius
       const rect=document.getElementById('globe-section').getBoundingClientRect();
       mouse.x=((mouseDownX-rect.left)/rect.width)*2-1;
       mouse.y=-((mouseDownY-rect.top)/rect.height)*2+1;
       raycaster.setFromCamera(mouse,camera);
+      // Expand raycaster threshold for easier tap targets on mobile
+      const oldThreshold=raycaster.params.Points?raycaster.params.Points.threshold:1;
+      raycaster.params.Points={threshold:0.05};
       const hits=raycaster.intersectObjects(markersArr);
       if(hits.length>0){const idx=hits[0].object.userData.idx;if(idx!==undefined)openCountryDetail(idx)}
+      else{document.getElementById('country-detail').classList.remove('open')}
     }
-    mouseDown=false;
+    mouseDown=false;touchIsHorizontal=false;
   });
   window.addEventListener('resize',onResize);
   animate();
