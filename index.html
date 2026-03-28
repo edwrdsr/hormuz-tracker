@@ -85,6 +85,21 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .metric-value{font-family:'Source Serif 4',serif;font-size:32px;font-weight:900;line-height:1}
 .metric-detail{font-size:11px;color:var(--text-dim);margin-top:4px}
 
+/* Crisis Duration Banner */
+.crisis-clock{display:flex;align-items:center;justify-content:center;gap:24px;padding:10px 32px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(255,34,34,.06),transparent 30%,transparent 70%,rgba(255,34,34,.06));font-family:'JetBrains Mono',monospace}
+.crisis-clock-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted)}
+.crisis-clock-units{display:flex;gap:16px}
+.crisis-clock-unit{text-align:center}
+.crisis-clock-val{font-family:'Source Serif 4',serif;font-size:24px;font-weight:900;color:var(--red);line-height:1}
+.crisis-clock-lbl{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:2px}
+.crisis-clock-sep{font-size:20px;color:var(--border);line-height:1;align-self:center;margin-top:-8px}
+@media(max-width:700px){
+  .crisis-clock{gap:12px;padding:8px 16px;flex-wrap:wrap}
+  .crisis-clock-val{font-size:18px}
+  .crisis-clock-units{gap:10px}
+  .crisis-clock-label{font-size:8px;width:100%;text-align:center}
+}
+
 /* Page sections (tab content) */
 .page-section{display:none;opacity:0;transition:opacity .25s ease}
 .page-section.active{display:block;animation:pageFadeIn .3s ease forwards}
@@ -421,7 +436,21 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .impact-headline{font-family:'Source Serif 4',serif;font-size:15px;font-weight:700;line-height:1.25;margin-bottom:3px}
 .impact-detail{font-size:11px;color:var(--text-dim);line-height:1.45}
 @media(max-width:1100px){.impact-box{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.impact-box{grid-template-columns:1fr}}
+@media(max-width:700px){
+  .impact-box{grid-template-columns:1fr}
+  .impact-item{padding:12px 14px;gap:10px}
+  .impact-icon{font-size:20px}
+  .impact-headline{font-size:13px}
+  .impact-detail{font-size:11px;line-height:1.5}
+  .cascade-heading{padding:16px 16px 6px}
+  .cascade-heading-text{font-size:16px}
+  .cascade-tier{padding:4px 16px 0}
+  .cascade-tier-badge{font-size:8px}
+  .regional-summary{font-size:12px;padding:12px 16px;line-height:1.5}
+  .regional-card{padding:12px}
+  .regional-card-title{font-size:12px}
+  .regional-card-text{font-size:11px}
+}
 
 /* Footer */
 .footer-note{padding:16px 32px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;line-height:1.6}
@@ -439,7 +468,13 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   .nav-tab{padding:6px 10px;font-size:9px}
   .metrics-strip{grid-template-columns:repeat(2,1fr)}.country-grid-wrap{padding:16px}
   .country-grid{grid-template-columns:1fr}.filter-bar{padding:10px 16px;flex-wrap:wrap;gap:8px}
-  .globe-section{height:300px}.globe-overlay-tl{max-width:200px;font-size:10px}
+  .globe-section{height:280px}.globe-overlay-tl{max-width:180px}
+  .globe-title{font-size:16px}.globe-subtitle{font-size:8px;display:none}
+  .globe-stats-row{gap:4px;margin-top:6px}
+  .globe-stat-chip{padding:4px 6px;gap:4px}
+  .globe-stat-chip .val{font-size:13px}.globe-stat-chip .lbl{font-size:7px}
+  .globe-overlay-tr{display:none}
+  .globe-hint{display:none}
   .history-grid{grid-template-columns:1fr}
   .feeds-grid{grid-template-columns:1fr}.methodology-page{padding:24px 16px}
   .share-bar{flex-wrap:wrap}
@@ -508,6 +543,19 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="oil-sec-item"><div class="oil-sec-label">Jet Fuel</div><div class="oil-sec-value" id="live-jet">—</div></div>
     <div class="oil-sec-item"><div class="oil-sec-label">US Gas</div><div class="oil-sec-value" id="live-gas">—</div></div>
   </div>
+</div>
+
+<!-- CRISIS DURATION CLOCK -->
+<div class="crisis-clock">
+  <span class="crisis-clock-label">Strait Closed</span>
+  <div class="crisis-clock-units">
+    <div class="crisis-clock-unit"><div class="crisis-clock-val" id="clock-days">—</div><div class="crisis-clock-lbl">Days</div></div>
+    <div class="crisis-clock-sep">:</div>
+    <div class="crisis-clock-unit"><div class="crisis-clock-val" id="clock-hours">—</div><div class="crisis-clock-lbl">Hours</div></div>
+    <div class="crisis-clock-sep">:</div>
+    <div class="crisis-clock-unit"><div class="crisis-clock-val" id="clock-mins">—</div><div class="crisis-clock-lbl">Min</div></div>
+  </div>
+  <span class="crisis-clock-label">Since Feb 28, 2026</span>
 </div>
 
 <!-- SHARE BAR -->
@@ -1003,11 +1051,28 @@ function updateTime(){
 updateTime();setInterval(updateTime,60000);
 
 // Days counter
-const closureStart = new Date('2026-02-28');
+const closureStart = new Date('2026-02-28T00:00:00+03:00'); // Approximate Gulf time
 const today = new Date();
 const daysSinceClosure = Math.floor((today - closureStart) / (1000*60*60*24));
 const daysEl = document.getElementById('days-counter');
 if(daysEl) daysEl.textContent = daysSinceClosure;
+
+// Live crisis clock
+function updateCrisisClock() {
+  const now = new Date();
+  const diff = now - closureStart;
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+  const de = document.getElementById('clock-days');
+  const he = document.getElementById('clock-hours');
+  const me = document.getElementById('clock-mins');
+  if(de) de.textContent = d;
+  if(he) he.textContent = String(h).padStart(2,'0');
+  if(me) me.textContent = String(m).padStart(2,'0');
+}
+updateCrisisClock();
+setInterval(updateCrisisClock, 60000);
 
 // ===== TICKER =====
 const tickerData=[
