@@ -776,8 +776,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <div class="about-modal">
     <button class="about-modal-close" id="about-close">✕</button>
     <div class="about-header">
-      <div class="about-name">Rich Edwards</div>
-      <div class="about-title">Independent OSINT Analyst · Builder</div>
+      <div class="about-name">HormuzTracker.org</div>
+      <div class="about-title">Independent OSINT Crisis Intelligence</div>
     </div>
     <div class="about-body">
       <div class="about-text">
@@ -792,20 +792,12 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
           <span class="about-contact-value"><a href="mailto:contact@hormuztracker.org">contact@hormuztracker.org</a></span>
         </div>
         <div class="about-contact-row">
-          <span class="about-contact-label">Signal</span>
-          <span class="about-contact-value">Available on request</span>
-        </div>
-        <div class="about-contact-row">
-          <span class="about-contact-label">X</span>
-          <span class="about-contact-value"><a href="#">@edwrdsr</a></span>
-        </div>
-        <div class="about-contact-row">
           <span class="about-contact-label">GitHub</span>
-          <span class="about-contact-value"><a href="#">github.com/edwrdsr/hormuz-tracker</a></span>
+          <span class="about-contact-value"><a href="https://github.com/edwrdsr/hormuz-tracker">github.com/edwrdsr/hormuz-tracker</a></span>
         </div>
       </div>
       <div class="about-secure-note">
-        For secure communications regarding sensitive data or corrections, please use Signal or the ProtonMail-compatible email above. PGP key available on request.
+        For corrections or data submissions, please use the email above.
       </div>
     </div>
   </div>
@@ -830,6 +822,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
           <option value="uk">🇬🇧 United Kingdom</option>
           <option value="eu">🇪🇺 EU / Western Europe</option>
           <option value="aus">🇦🇺 Australia</option>
+          <option value="nz">🇳🇿 New Zealand</option>
           <option value="india">🇮🇳 India</option>
           <option value="japan">🇯🇵 Japan</option>
           <option value="sea">🌏 Southeast Asia</option>
@@ -908,7 +901,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <div class="footer-inner">
     <div class="footer-left">Data compiled from IEA, FAO, CNBC, Reuters, Atlantic Council, Dallas Fed, UN ESCAP, Al Jazeera, CFR, WFP, Columbia CGEP, IFPRI, and government press releases. Open data — free to use with attribution. Not investment, policy, or safety advice.</div>
     <div class="footer-right">
-      <span class="footer-link"><a href="#" onclick="document.getElementById('about-overlay').classList.add('open');return false" class="footer-link">Built by Rich Edwards</a></span>
+      <span class="footer-link"><a href="#" onclick="document.getElementById('about-overlay').classList.add('open');return false" class="footer-link">HormuzTracker.org</a></span>
       <span class="footer-sep">·</span>
       <a href="#" onclick="document.getElementById('about-overlay').classList.add('open');return false" class="footer-contact">Contact</a>
     </div>
@@ -943,6 +936,8 @@ const countries = [
   {name:"EU / Europe",flag:"🇪🇺",region:"Europe",level:"high",types:["energy","economic"],reserves:"<30% gas",dep:"12-14% LNG Gulf",lat:50.85,lng:4.35,measures:"ECB postponed rate cuts. Gas doubled (>€60/MWh). 30% industrial surcharges. UK inflation >5%.",sources:["https://en.wikipedia.org/wiki/Economic_impact_of_the_2026_Iran_war"],srcLabel:"Wikipedia · Time · Politico",verified:"Mar 23, 2026"},
   {name:"China",flag:"🇨🇳",region:"East Asia",level:"elevated",types:["energy","economic"],reserves:"~1.2B bbl",dep:"40% via Hormuz",lat:35.86,lng:104.20,measures:"Vessels still transiting. LNG buffer. Pipeline imports from Russia up. Fertilizer exports restricted.",sources:[],srcLabel:"CNBC · Atlas Institute",verified:"Mar 22, 2026"},
   {name:"Brazil",flag:"🇧🇷",region:"Latin America",level:"elevated",types:["food"],reserves:"N/A",dep:"Fertilizer dep.",lat:-14.24,lng:-51.93,measures:"~50% fertilizer imports transit Hormuz. Sowing season at risk. Major ag production threatened.",sources:["https://www.aljazeera.com/economy/2026/3/18/not-just-energy-how-the-iran-war-could-trigger-a-global-food-crisis"],srcLabel:"Al Jazeera · Atlantic Council",verified:"Mar 20, 2026"},
+  {name:"Australia",flag:"🇦🇺",region:"Asia-Pacific",level:"high",types:["energy","economic"],reserves:"~30 days",dep:"90% refined fuel imported",lat:-25.27,lng:133.78,measures:"Only 30 days refined fuel supply. 59% of supplier crude transits Hormuz. Qantas fares +5%. Joined intl coalition to secure strait. IEA reserve release participant.",sources:["https://www.aspistrategist.org.au/hormuz-closure-brings-australias-layered-fuel-vulnerability-to-the-fore/","https://www.internationalaffairs.org.au/australianoutlook/the-escalation-trap-is-exposing-australias-economic-vulnerability/"],srcLabel:"ASPI Strategist · AIIA · Energy Matters",verified:"Mar 24, 2026"},
+  {name:"New Zealand",flag:"🇳🇿",region:"Asia-Pacific",level:"high",types:["energy","economic"],reserves:"Limited",dep:"100% refined fuel imported",lat:-40.90,lng:174.89,measures:"100% reliant on imported refined fuel. Force majeure cascading through supply chain. Air NZ cancelled ~5% of schedule. Diesel tightening as Asian refineries lose Gulf crude.",sources:["https://wiseresponse.org.nz/2026/03/09/hormuz-crisis-deepens-one-week-in-the-strait-remains-closed-and-new-zealand-has-no-plan/"],srcLabel:"Wise Response · NZ Herald",verified:"Mar 24, 2026"},
   {name:"United States",flag:"🇺🇸",region:"North America",level:"elevated",types:["food","energy","economic"],reserves:"SPR + domestic",dep:"Fertilizer + helium",lat:39.83,lng:-98.58,measures:"Gas prices near $4/gal (+26%). Farm Bureau warns of crop shortfall risk. Urea at NOLA hub +28%. Saudi Arabia is top US phosphate supplier — blocked. 1/3 of global helium (semiconductor input) transits Hormuz. IEA reserve release participant. Planting season timing critical for Midwest corn/soy.",sources:["https://farmdocdaily.illinois.edu/2026/03/strait-of-hormuz-closure-and-fertilizer-supply-risks-for-us-agriculture.html","https://www.tfi.org/media-center/2026/03/04/tfi-strait-of-hormuz-closure-impacts-to-fertilizer/","https://abcnews.com/Business/big-concern-closure-strait-hormuz-drive-prices-gasoline/story?id=131322577"],srcLabel:"Farmdoc · TFI · ABC News · AFBF",verified:"Mar 24, 2026"},
 ];
 
@@ -1729,6 +1724,7 @@ const regionData = {
   'uk':      { gasUp: 0.45, gasPre: 1.40, elecUp: 0.06, groceryMult: 1.25, currency: '£', label: 'United Kingdom', mpg: 35, perLiter: true },
   'eu':      { gasUp: 0.38, gasPre: 1.65, elecUp: 0.07, groceryMult: 1.20, currency: '€', label: 'EU / W. Europe', mpg: 35, perLiter: true },
   'aus':     { gasUp: 0.35, gasPre: 1.80, elecUp: 0.04, groceryMult: 1.10, currency: 'A$', label: 'Australia', mpg: 30, perLiter: true },
+  'nz':      { gasUp: 0.40, gasPre: 2.70, elecUp: 0.03, groceryMult: 1.12, currency: 'NZ$', label: 'New Zealand', mpg: 30, perLiter: true },
   'india':   { gasUp: 12, gasPre: 95, elecUp: 2.5, groceryMult: 1.8, currency: '₹', label: 'India', mpg: 18, perLiter: true, groceryBase: 3000 },
   'japan':   { gasUp: 22, gasPre: 170, elecUp: 5, groceryMult: 1.15, currency: '¥', label: 'Japan', mpg: 20, perLiter: true, groceryBase: 45000 },
   'sea':     { gasUp: 8, gasPre: 35, elecUp: 1.5, groceryMult: 1.6, currency: '$', label: 'SE Asia (USD equiv)', mpg: 22, perLiter: true, groceryBase: 150 }
