@@ -1273,12 +1273,12 @@ setTimeout(() => {
 }, 200);
 
 // Oil price simulation — simulates live fluctuation around current price
-let currentOilPrice = 105.51;
+let currentOilPrice = 112.57;
 const oilEl = document.getElementById('oil-price-num');
 const oilChangeEl = document.getElementById('oil-change');
 
 // ===== LIVE DATA FETCHING =====
-const API_BASE = 'https://hormuz-api.YOUR_SUBDOMAIN.workers.dev'; // UPDATE THIS after deploying worker
+const API_BASE = 'https://hormuz-api.richedw7-ef1.workers.dev';
 
 let lastOilData = null;
 let lastNewsData = null;
@@ -1378,7 +1378,7 @@ function getTimeAgo(dateStr) {
 
 function simulateOilPrice() {
   const delta = (Math.random() - 0.48) * 0.6;
-  currentOilPrice = Math.max(95, Math.min(130, currentOilPrice + delta));
+  currentOilPrice = Math.max(105, Math.min(135, currentOilPrice + delta));
   const rounded = currentOilPrice.toFixed(2);
   const changeFromPreWar = (currentOilPrice - 87.20).toFixed(2);
   const changePct = ((currentOilPrice - 87.20) / 87.20 * 100).toFixed(1);
