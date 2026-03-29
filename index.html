@@ -708,6 +708,14 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
           <div class="impact-detail">Insurance rates 4-6× higher. Ships rerouting via Cape of Good Hope (+weeks of transit time). Container rates spiking.</div>
         </div>
       </div>
+      <div class="impact-item">
+        <div class="impact-icon">FIN</div>
+        <div class="impact-content">
+          <div class="impact-label">Financial markets</div>
+          <div class="impact-headline">Marine insurance 4-6× pre-war</div>
+          <div class="impact-detail">Gulf sovereign CDS spreads widening sharply. Trade finance letters of credit delayed as banks reassess exposure. Emerging market currencies selling off — Turkish lira, Pakistani rupee under heavy pressure.</div>
+        </div>
+      </div>
     </div>
 
     <div class="cascade-tier">
@@ -750,6 +758,14 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
           <div class="impact-detail">Synthetic fabrics depend on petrochemicals via Hormuz. Bangladesh (world's #2 garment exporter) already rationing energy for factories.</div>
         </div>
       </div>
+      <div class="impact-item">
+        <div class="impact-icon">BNK</div>
+        <div class="impact-content">
+          <div class="impact-label">Trade finance & currency</div>
+          <div class="impact-headline">Capital flight from EM assets</div>
+          <div class="impact-detail">Banks freezing trade finance for Gulf-exposed routes. EM currencies down 8-15%. Central banks burning reserves to defend pegs. Sovereign credit downgrades accelerating across energy importers.</div>
+        </div>
+      </div>
     </div>
 
     <div class="cascade-tier">
@@ -790,6 +806,14 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
           <div class="impact-label">Geopolitical shift</div>
           <div class="impact-headline">China & Russia gain leverage</div>
           <div class="impact-detail">China controls fertilizer exports. Russia selling oil at premium to stranded buyers. Both positioned to gain influence over disrupted supply chains long-term.</div>
+        </div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon">DFT</div>
+        <div class="impact-content">
+          <div class="impact-label">Sovereign debt & defaults</div>
+          <div class="impact-headline">IMF emergency lending activated</div>
+          <div class="impact-detail">Energy-poor nations facing debt distress as import bills explode and currencies collapse. IMF and World Bank emergency facilities overwhelmed. Insurance markets refusing Gulf coverage at any price. Global credit tightening.</div>
         </div>
       </div>
     </div>
@@ -1781,42 +1805,55 @@ function updateScenario(days) {
   const gasPrice = (3.99 + (months * 0.45)).toFixed(2);
   const gasCapped = Math.min(parseFloat(gasPrice), 7.50);
 
+  // Financial stress index (0-100 scale)
+  const finStress = Math.min(100, Math.round(15 + (months * 12) + (months > 3 ? (months - 3) * 6 : 0)));
+  // Emerging market currency depreciation
+  const emCurrDrop = Math.min(45, (months * 3.5 + (months > 2 ? (months - 2) * 2 : 0)).toFixed(0));
+  // Shipping insurance multiplier
+  const insuranceMult = Math.min(12, (1 + months * 1.2 + (months > 1 ? months * 0.5 : 0)).toFixed(1));
+
   document.getElementById('scenario-results').innerHTML = `
     <div class="scenario-result-card red">
       <div class="scenario-result-label">Projected Oil Price</div>
       <div class="scenario-result-value" style="color:var(--crisis-critical)">$${oilPriceCapped}</div>
-      <div class="scenario-result-detail">Brent crude per barrel. Pre-war: $87. Current: ~$106. Pressure compounds as reserves deplete and alternatives exhaust.</div>
+      <div class="scenario-result-detail">Brent crude per barrel. Pre-war: $87. Current: ~$106. ${days <= 30 ? 'Market volatility driven by uncertainty and speculation.' : days <= 60 ? 'Sustained premium as physical shortages begin to bite.' : days <= 90 ? 'Supply destruction now structural. Alternative routes at max capacity.' : days <= 180 ? 'Reserves exhausted. Prices reflect genuine scarcity, not speculation.' : 'Permanent demand destruction. Industries closing, not pausing.'}</div>
       <div class="scenario-result-bar"><div class="scenario-result-fill" style="width:${Math.min(100, (oilPriceCapped/220)*100)}%;background:var(--crisis-critical)"></div></div>
     </div>
     <div class="scenario-result-card red">
       <div class="scenario-result-label">Global GDP Impact</div>
       <div class="scenario-result-value" style="color:var(--crisis-critical)">−${gdpImpactCapped}%</div>
-      <div class="scenario-result-detail">Annualized GDP growth reduction (Dallas Fed model). A ${days > 90 ? 'severe' : days > 30 ? 'significant' : 'measurable'} drag on the global economy${days > 60 ? ', with recession likely in import-dependent economies' : ''}.</div>
+      <div class="scenario-result-detail">Annualized GDP growth reduction (Dallas Fed model). ${days <= 14 ? 'Early shock phase — markets volatile but real economy impact still building.' : days <= 30 ? 'Measurable drag on global growth. Energy-importing economies most exposed.' : days <= 60 ? 'Significant contraction underway. Import-dependent economies entering recession.' : days <= 90 ? 'Severe drag. Multiple economies in recession. Central banks face impossible stagflation trade-off.' : days <= 180 ? 'Depression-level contraction in vulnerable economies. Global trade volumes collapsed.' : 'Structural economic damage. Industrial base permanently reduced in energy-poor nations.'}</div>
       <div class="scenario-result-bar"><div class="scenario-result-fill" style="width:${Math.min(100, (gdpImpactCapped/8.5)*100)}%;background:var(--crisis-critical)"></div></div>
     </div>
     <div class="scenario-result-card amber">
       <div class="scenario-result-label">IEA Reserve Depletion</div>
       <div class="scenario-result-value" style="color:${reservePct > 80 ? 'var(--crisis-critical)' : 'var(--amber)'}">${reservePct}%</div>
-      <div class="scenario-result-detail">${reservePct >= 100 ? 'Coordinated IEA reserves fully exhausted. Market enters unmanaged shortage phase — prices move to demand-destruction levels.' : `Of the 400M barrel coordinated release consumed. ${100 - reservePct}% remaining. Depletion at ~4M bbl/day net shortfall.`}</div>
+      <div class="scenario-result-detail">${reservePct >= 100 ? 'Coordinated IEA reserves fully exhausted. Market enters unmanaged shortage phase — prices move to demand-destruction levels.' : reservePct > 80 ? `Reserves critically low at ${100 - reservePct}% remaining. Emergency rationing discussions underway among IEA members. Days away from exhaustion.` : reservePct > 50 ? `Of the 400M barrel coordinated release consumed. ${100 - reservePct}% remaining. Burn rate of ~4M bbl/day accelerating as hoarding increases.` : `Of the 400M barrel coordinated release consumed. ${100 - reservePct}% remaining. Depletion at ~4M bbl/day net shortfall.`}</div>
       <div class="scenario-result-bar"><div class="scenario-result-fill" style="width:${reservePct}%;background:${reservePct > 80 ? 'var(--crisis-critical)' : 'var(--amber)'}"></div></div>
     </div>
     <div class="scenario-result-card amber">
       <div class="scenario-result-label">Fertilizer Price Increase</div>
       <div class="scenario-result-value" style="color:var(--amber)">+${fertCapped}%</div>
-      <div class="scenario-result-detail">${days > 60 ? 'Northern Hemisphere planting window closing or closed. Yield reductions now locked in for 2026 harvest. Food price inflation propagates 4-6 months after planting failure.' : 'Urea and nitrogen prices surging. Planting season underway — every week of closure increases harvest risk.'}</div>
+      <div class="scenario-result-detail">${days <= 30 ? 'Urea and nitrogen prices surging. Planting season underway — every week of closure increases harvest risk.' : days <= 60 ? 'Spring planting window narrowing fast. Farmers delaying fertilizer purchases hoping for price relief. Each week of delay reduces potential yields.' : days <= 90 ? 'Northern Hemisphere planting window closing. Yield reductions now locked in for 2026 harvest regardless of resolution.' : days <= 180 ? 'Planting season missed. 2026 harvest yields will be materially lower. Food price inflation propagates 4-6 months after planting failure.' : 'Multiple planting seasons disrupted. Global fertilizer supply chains restructured around non-Gulf routes at permanently higher cost.'}</div>
       <div class="scenario-result-bar"><div class="scenario-result-fill" style="width:${Math.min(100, (fertCapped/200)*100)}%;background:var(--amber)"></div></div>
     </div>
     <div class="scenario-result-card amber">
       <div class="scenario-result-label">US Gas Price</div>
       <div class="scenario-result-value" style="color:var(--amber)">$${gasCapped}/gal</div>
-      <div class="scenario-result-detail">${gasCapped > 5.50 ? 'Approaching 2008 crisis levels. Demand destruction begins — consumers cut driving, economic activity contracts.' : `Up from $3.20 pre-war. ${gasCapped > 4.50 ? 'Pain threshold for most US households reached.' : 'Noticeable impact on household budgets.'}`}</div>
+      <div class="scenario-result-detail">${gasCapped > 6.50 ? 'Beyond 2008 peak. Permanent demand destruction — commuting patterns, supply chains, and consumer behavior fundamentally altered.' : gasCapped > 5.50 ? 'Approaching 2008 crisis levels. Demand destruction begins — consumers cut driving, carpooling surges, economic activity contracts.' : gasCapped > 4.50 ? `Up from $3.20 pre-war. Pain threshold for most US households reached. Low-income families spending 15%+ of income on fuel.` : `Up from $3.20 pre-war. Noticeable impact on household budgets. Trucking and delivery surcharges rising.`}</div>
       <div class="scenario-result-bar"><div class="scenario-result-fill" style="width:${Math.min(100, (gasCapped/7.50)*100)}%;background:var(--amber)"></div></div>
     </div>
     <div class="scenario-result-card blue">
       <div class="scenario-result-label">People Food-Insecure</div>
       <div class="scenario-result-value" style="color:var(--blue)">${foodInsecure}M+</div>
-      <div class="scenario-result-detail">${days > 90 ? 'Crisis extends beyond Gulf states into South Asia, East Africa, and import-dependent nations globally. Humanitarian emergency.' : 'Gulf states (50M+) plus cascading impact on import-dependent nations. FAO warns of "generational ripples."'}</div>
+      <div class="scenario-result-detail">${days <= 30 ? 'Gulf states (50M+) facing immediate supply disruption. Food import routes blocked. Emergency stockpiles being drawn down.' : days <= 60 ? 'Gulf food crisis deepening. South Asian nations (Bangladesh, Pakistan) beginning to feel cascading shortages. FAO warns of "generational ripples."' : days <= 90 ? 'Crisis spreading to East Africa and Southeast Asia. Import-dependent nations rationing staple goods. Humanitarian corridors proposed.' : days <= 180 ? 'Full-scale humanitarian emergency across multiple regions. WFP emergency operations in 20+ countries. Migration surges beginning.' : 'Generational food crisis. Famine conditions in vulnerable regions. Permanent dietary shifts and agricultural restructuring underway globally.'}</div>
       <div class="scenario-result-bar"><div class="scenario-result-fill" style="width:${Math.min(100, (foodInsecure/300)*100)}%;background:var(--blue)"></div></div>
+    </div>
+    <div class="scenario-result-card red">
+      <div class="scenario-result-label">Financial Stress Index</div>
+      <div class="scenario-result-value" style="color:${finStress > 70 ? 'var(--crisis-critical)' : finStress > 40 ? 'var(--amber)' : 'var(--blue)'}">${finStress}/100</div>
+      <div class="scenario-result-detail">${days <= 14 ? 'Currency volatility spiking. Gulf sovereign CDS spreads widening. Marine insurance rates 3-4x pre-war. Trade finance letters of credit delayed as banks reassess Gulf exposure.' : days <= 30 ? 'Emerging market currencies under heavy pressure (avg -' + emCurrDrop + '%). Shipping insurance at ' + insuranceMult + 'x pre-war. Bond markets repricing sovereign risk across energy-importing nations.' : days <= 60 ? 'Capital flight from Gulf and EM assets accelerating. Shipping insurance at ' + insuranceMult + 'x pre-war — effectively a tax on all seaborne trade. Trade finance freezing for Gulf-exposed routes. Central banks burning reserves to defend currencies.' : days <= 90 ? 'Sovereign debt crisis emerging in energy-poor nations. IMF emergency lending facilities activated. Insurance markets refusing Gulf coverage at any price. Currency pegs under extreme pressure — multiple devaluations likely.' : days <= 180 ? 'Full financial contagion. EM sovereign defaults. Insurance and trade finance markets for Gulf routes have collapsed entirely. Global credit conditions tightening as banks de-risk.' : 'Financial system restructured. New trade settlement mechanisms bypassing Gulf routes. Permanent repricing of maritime and energy risk globally.'}</div>
+      <div class="scenario-result-bar"><div class="scenario-result-fill" style="width:${finStress}%;background:${finStress > 70 ? 'var(--crisis-critical)' : finStress > 40 ? 'var(--amber)' : 'var(--blue)'}"></div></div>
     </div>
   `;
 
@@ -1826,8 +1863,10 @@ function updateScenario(days) {
     narrative = `At ${days} days, the crisis is in its acute phase. Strategic reserves are absorbing the shock, but market psychology is driving prices higher than fundamentals alone would suggest. Brent is at ~$106 and volatile. The key variable is insurance — even if military escorts begin, insurers need weeks of zero-incident data before re-entering the market. Most import-dependent nations can sustain current consumption rates from reserves, but panic buying and hoarding are already distorting distribution.`;
   } else if (days <= 45) {
     narrative = `At ${days} days, the crisis enters a critical inflection. IEA strategic reserves are ${reservePct}% depleted. Countries with thin buffers (Vietnam: ~20 days, Bangladesh: limited, Philippines: 45-50 days) are now entering genuine shortage territory. The fertilizer impact is now locked in for the spring planting season — even if the strait reopened tomorrow, restarting production and shipping takes weeks that farmers don't have. The economic narrative shifts from "oil shock" to "structural supply chain damage."`;
+  } else if (days <= 60) {
+    narrative = `At ${days} days, the crisis has moved past the "shock and awe" phase into structural damage. IEA strategic reserves are ${reservePct}% depleted — the coordinated release is buying time, but not solving the problem. Countries with thin buffers are now in genuine shortage territory. The fertilizer market is where the real second-order damage is building: spring planting is underway across the Northern Hemisphere, and farmers are either paying extreme premiums or planting with insufficient inputs. The 2026 harvest is now at risk regardless of what happens militarily. Insurance markets have effectively priced Gulf shipping as a war zone — even partial reopening won't normalize rates for months. Central banks are trapped between fighting inflation and avoiding recession.`;
   } else if (days <= 90) {
-    narrative = `At ${days} days, this matches the 1973 oil embargo in duration. But the scale is categorically different — 20M bbl/day vs 4.4M in 1973. IEA coordinated reserves are ${reservePct >= 100 ? 'exhausted' : 'nearing exhaustion'}. Oil prices at $${oilPriceCapped}/bbl are approaching demand-destruction levels where economic activity contracts not by choice but by necessity. The fertilizer window for Northern Hemisphere planting is now closed — 2026 harvest yields will be materially lower regardless of when the strait reopens. Food inflation is now a certainty for late 2026, with the most vulnerable populations in the Gulf, South Asia, and East Africa facing humanitarian crisis.`;
+    narrative = `At ${days} days, this matches the 1973 oil embargo in duration — but the scale is categorically different. The '73 embargo removed 4.4M bbl/day; this closure blocks 20M bbl/day. IEA coordinated reserves are ${reservePct >= 100 ? 'exhausted' : 'approaching exhaustion at ' + reservePct + '% depleted'}. Oil at $${oilPriceCapped}/bbl is entering demand-destruction territory where economic activity contracts not by choice but by necessity. The fertilizer window for Northern Hemisphere planting has closed — 2026 harvest yields will be materially lower regardless of when the strait reopens. Financial markets have repriced sovereign debt across the Gulf and emerging markets. Multiple central banks have been forced into emergency rate decisions. Food inflation is now a certainty for late 2026.`;
   } else if (days <= 180) {
     narrative = `At ${days} days, this is the most severe energy disruption in modern history by a wide margin. Strategic reserves are exhausted. Oil prices at $${oilPriceCapped}/bbl reflect genuine scarcity, not speculation. Global GDP has contracted by an estimated ${gdpImpactCapped}%. Multiple economies are in recession. The food crisis is now global — the combination of failed planting seasons, depleted fertilizer stocks, and prohibitive transport costs is creating hunger in countries that haven't experienced it in decades. The geopolitical order is reshaping: China and Russia's leverage over energy and fertilizer supply chains is now structural, not opportunistic. Energy transition investments have surged but cannot deliver results for years.`;
   } else {
