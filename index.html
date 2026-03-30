@@ -422,6 +422,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .alert-tag.breaking{background:var(--crisis-critical);color:#fff}
 .alert-tag.update{background:var(--amber);color:#000}
 .alert-tag.developing{background:var(--blue);color:#fff}
+.alert-tag.flash{background:var(--crisis-severe);color:#fff}
 .alert-text{color:var(--text-dim)}
 .alert-text strong{color:var(--text);font-weight:600}
 .alert-time{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);flex-shrink:0}
@@ -1146,22 +1147,28 @@ setInterval(updateCrisisClock, 60000);
 
 // ===== TICKER =====
 const tickerData=[
-  {l:"BRENT CRUDE",v:"<span id='ticker-brent'>$106 /bbl</span>",c:"vs $87 pre-war",d:"up"},{l:"HORMUZ TRANSIT",v:"−90%",c:"from pre-war",d:"up"},
-  {l:"EU GAS (TTF)",v:"~doubled",c:"from pre-war",d:"up"},{l:"UREA",v:"+30%+",c:"from pre-war",d:"up"},
-  {l:"IEA RELEASE",v:"400M bbl",c:"largest ever",d:"down"},{l:"VESSELS STRANDED",v:"1,000+",c:"near Hormuz",d:"up"},
-  {l:"GULF OIL EXPORTS",v:"−60%",c:"region-wide",d:"up"},{l:"JET FUEL",v:"+100%+",c:"from pre-war",d:"up"},
-  {l:"COUNTRIES",v:countries.length+"+",c:"emergency measures",d:"up"}
+  {l:"BRENT CRUDE",v:"<span id='ticker-brent'>$105 /bbl</span>",c:"vs $87 pre-war",d:"up"},{l:"HORMUZ TRANSIT",v:"−90%",c:"~7 ships/day vs 70-80",d:"up"},
+  {l:"EU GAS (TTF)",v:"~doubled",c:"from pre-war",d:"up"},{l:"UREA",v:"+30%+",c:"QAFCO (14% global) halted",d:"up"},
+  {l:"IEA RELEASE",v:"400M bbl",c:"largest coordinated ever",d:"down"},{l:"US SPR",v:"172M bbl released",c:"415M bbl total",d:"up"},
+  {l:"S. KOREA RESERVES",v:"22.46M bbl",c:"record release",d:"up"},{l:"JAPAN RESERVES",v:"80M bbl",c:"largest-ever release",d:"up"},
+  {l:"VESSELS STRANDED",v:"1,000+",c:"near Hormuz",d:"up"},{l:"INSURANCE",v:"4-6x pre-war",c:"Gulf war risk zone",d:"up"},
+  {l:"COUNTRIES",v:countries.length+"+",c:"emergency measures",d:"up"},{l:"IRAN TOLL",v:"~$2M/ship",c:"selective passage",d:"up"}
 ];
 const tH=tickerData.map(t=>`<div class="ticker-item"><span class="ticker-label">${t.l}</span><span class="ticker-value">${t.v}</span><span class="ticker-change ${t.d}">${t.c}</span></div><span class="ticker-sep">●</span>`).join('');
 document.getElementById('ticker').innerHTML=tH+tH;
 
 // ===== ALERT BANNER =====
 const alerts = [
-  { tag: "breaking", text: "<strong>Trump calls off Hormuz ultimatum</strong> as Iran receives message from mediators via Oman — CBS News", time: "2h ago" },
-  { tag: "update", text: "Brent crude climbs to $105+ as Iran denies any negotiations are underway — CNBC", time: "3h ago" },
-  { tag: "developing", text: "Iran denies negotiations underway, says strait remains closed to \"enemies\" — Al Jazeera", time: "5h ago" },
-  { tag: "update", text: "American Farm Bureau urges Trump to reopen strait: \"U.S. risks a shortfall in crops\" — WisFarmer", time: "14h ago" },
-  { tag: "update", text: "UN ESCAP: Oil up 45%, gas up 55%, fertilizer up 35% since late February. Regional inflation forecast raised to 4.6% — UN News", time: "4d ago" },
+  { tag: "breaking", text: "<strong>Thousands more US troops deploying to Middle East</strong> — Pentagon readying for potential ground operations in Iran — NPR", time: "Mar 30" },
+  { tag: "breaking", text: "<strong>Houthis join Iran war</strong> — ballistic missiles launched toward Israel, air raid sirens in Beersheba — ACLED", time: "Mar 28" },
+  { tag: "developing", text: "<strong>Pakistan hosts peace talks</strong> with Egypt, Saudi Arabia, Turkey on reopening Strait of Hormuz — Fortune", time: "Mar 29" },
+  { tag: "update", text: "<strong>Iran's 'Tehran toll booth'</strong> — IRGC charging ~$2M per merchant ship, selective passage for 7 nations — Foreign Policy", time: "Mar 26" },
+  { tag: "update", text: "<strong>Philippines first to declare national energy emergency</strong> — year-long Executive Order 110 signed by Marcos — Rappler", time: "Mar 24" },
+  { tag: "flash", text: "<strong>Laos filling stations closing</strong> as Thailand cuts fuel deliveries — inflation hits 9.7% — Laotian Times", time: "Mar 28" },
+  { tag: "update", text: "<strong>South Korea releases record 22.46M barrels</strong> from strategic reserves — largest in history — S&P Global", time: "Mar 26" },
+  { tag: "update", text: "<strong>Slovenia first EU country to ration fuel</strong> — 50L/person cap, army deployed for distribution — Newsweek", time: "Mar 22" },
+  { tag: "developing", text: "<strong>Lebanon: 1,000+ killed, ~1M displaced</strong> (20% of population) since full-scale war began Mar 2 — IOM", time: "Mar 30" },
+  { tag: "update", text: "<strong>Nigeria pump prices up 65%</strong> — largest spike among major African economies despite Dangote refinery — CNBC Africa", time: "Mar 30" },
 ];
 
 const alertTrack = document.getElementById('alert-track');
@@ -1184,12 +1191,12 @@ document.getElementById('metrics-strip').innerHTML=`
 document.getElementById('feeds-grid').innerHTML=`
   <div class="feed-panel">
     <div class="feed-title"><span class="feed-live-dot"></span> Brent Crude Oil</div>
-    <div class="feed-big-number" style="color:var(--red)" id="feed-oil-price">$106</div>
-    <div class="feed-change up">▲ Volatile · Swings 5-10% on headlines</div>
-    <div class="feed-detail">Peaked $126 on Mar 8. Pre-war: $87. Large swings on every diplomatic development.</div>
+    <div class="feed-big-number" style="color:var(--red)" id="feed-oil-price">$105</div>
+    <div class="feed-change up">▲ +45% from pre-war · Peaked $126 on Mar 8</div>
+    <div class="feed-detail">Pre-war: $87. Iran toll system and selective passage creating two-tier market. Large swings on every diplomatic development.</div>
     <div class="feed-substat">
-      <div class="feed-substat-item"><div class="feed-substat-label">WTI</div><div class="feed-substat-value" id="feed-wti">$93</div></div>
-      <div class="feed-substat-item"><div class="feed-substat-label">US Gas</div><div class="feed-substat-value" id="feed-gas">~$4.00</div></div>
+      <div class="feed-substat-item"><div class="feed-substat-label">WTI</div><div class="feed-substat-value" id="feed-wti">$99</div></div>
+      <div class="feed-substat-item"><div class="feed-substat-label">US Gas</div><div class="feed-substat-value" id="feed-gas">~$4.03</div></div>
       <div class="feed-substat-item"><div class="feed-substat-label">Jet Fuel</div><div class="feed-substat-value" id="feed-jet">~$195</div></div>
     </div>
     <div class="feed-chart"><canvas id="chart-oil"></canvas></div>
@@ -1199,7 +1206,7 @@ document.getElementById('feeds-grid').innerHTML=`
     <div class="feed-title"><span class="feed-live-dot"></span> Strait Transit Traffic</div>
     <div class="feed-big-number" style="color:var(--amber)">−90%</div>
     <div class="feed-change up">▼ ~7 crossings/day (from 70-80 pre-war)</div>
-    <div class="feed-detail">Only Chinese, Indian, Pakistani-flagged vessels transiting with Iranian permission. 1,000+ ships anchored outside strait.</div>
+    <div class="feed-detail">Iran's 'Tehran toll booth': 7 nations granted selective passage at ~$2M/ship. COSCO ships turned back Mar 27. 1,000+ ships anchored outside strait.</div>
     <div class="feed-substat">
       <div class="feed-substat-item"><div class="feed-substat-label">Oil Stranded</div><div class="feed-substat-value">16M bpd</div></div>
       <div class="feed-substat-item"><div class="feed-substat-label">Ship Attacks</div><div class="feed-substat-value">21+</div></div>
