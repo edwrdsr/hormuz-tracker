@@ -508,8 +508,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </div>
   <div class="header-right">
     <div class="update-time">
-      <span id="data-status" style="color:var(--amber)">◉ STATIC</span>
-      UPDATED <span id="update-time"></span>
+      <span id="data-status" role="status" style="color:var(--amber)">◉ OIL: STATIC</span>
+      CLOCK <span id="update-time"></span>
     </div>
     <div class="nav-tabs">
       <button class="nav-tab active" data-page="dashboard">Dashboard</button>
@@ -1293,65 +1293,72 @@ const API_BASE = 'https://hormuz-api.richedw7-ef1.workers.dev';
 
 let lastOilData = null;
 let lastNewsData = null;
-let apiConnected = false;
+function setOilStatus(label, color, detail) {
+  const status = document.getElementById('data-status');
+  status.textContent = '◉ OIL: ' + label;
+  status.style.color = color;
+  status.title = detail;
+}
 
 async function fetchLiveOil() {
   try {
-    const res = await fetch(API_BASE + '/api/oil');
+    const res = await fetch(API_BASE + '/api/oil', { signal: AbortSignal.timeout(10000) });
     if (!res.ok) throw new Error('API ' + res.status);
     const data = await res.json();
-    if (data.brent && data.brent.price) {
-      lastOilData = data;
-      apiConnected = true;
-      currentOilPrice = data.brent.price;
-      const preWar = data.context?.pre_war_brent || 87.20;
-      const change = (currentOilPrice - preWar).toFixed(2);
-      const changePct = (((currentOilPrice - preWar) / preWar) * 100).toFixed(1);
+    if (!Number.isFinite(data.brent?.price)) throw new Error('Missing Brent quote');
+    currentOilPrice = data.brent.price;
+    const preWar = data.context?.pre_war_brent || 87.20;
+    const change = (currentOilPrice - preWar).toFixed(2);
+    const changePct = (((currentOilPrice - preWar) / preWar) * 100).toFixed(1);
 
-      oilEl.textContent = '$' + currentOilPrice.toFixed(2);
-      oilEl.classList.add('flash-up');
-      setTimeout(() => oilEl.classList.remove('flash-up'), 800);
-      oilChangeEl.innerHTML = '▲ +$' + change + ' (+' + changePct + '%)';
-      oilChangeEl.className = 'oil-change up';
+    oilEl.textContent = '$' + currentOilPrice.toFixed(2);
+    oilEl.classList.add('flash-up');
+    setTimeout(() => oilEl.classList.remove('flash-up'), 800);
+    oilChangeEl.innerHTML = '▲ +$' + change + ' (+' + changePct + '%)';
+    oilChangeEl.className = 'oil-change up';
 
-      // Update all derived prices from live Brent
-      if (data.wti?.price) document.getElementById('live-wti').textContent = '$' + data.wti.price.toFixed(2);
-      if (data.heating_oil?.price) document.getElementById('live-diesel').textContent = '$' + (data.heating_oil.price * 42).toFixed(0); // HO is $/gal, convert
-      else document.getElementById('live-diesel').textContent = '$' + (currentOilPrice * 1.35).toFixed(0); // estimate
-      document.getElementById('live-jet').textContent = '$' + (currentOilPrice * 1.85).toFixed(0); // jet ~1.85x crude
-      document.getElementById('live-gas').textContent = '$' + (2.50 + currentOilPrice * 0.0145).toFixed(2) + '/gal'; // rough retail model
+    // Update all derived prices from live Brent
+    if (Number.isFinite(data.wti?.price)) document.getElementById('live-wti').textContent = '$' + data.wti.price.toFixed(2);
+    if (Number.isFinite(data.heating_oil?.price)) document.getElementById('live-diesel').textContent = '$' + (data.heating_oil.price * 42).toFixed(0); // HO is $/gal, convert
+    else document.getElementById('live-diesel').textContent = '$' + (currentOilPrice * 1.35).toFixed(0); // estimate
+    document.getElementById('live-jet').textContent = '$' + (currentOilPrice * 1.85).toFixed(0); // jet ~1.85x crude
+    document.getElementById('live-gas').textContent = '$' + (2.50 + currentOilPrice * 0.0145).toFixed(2) + '/gal'; // rough retail model
 
-      // Update feeds panel
-      const feedOil = document.getElementById('feed-oil-price');
-      if (feedOil) feedOil.textContent = '$' + currentOilPrice.toFixed(2);
-      const feedWti = document.getElementById('feed-wti');
-      if (feedWti && data.wti?.price) feedWti.textContent = '$' + data.wti.price.toFixed(2);
-      const feedGas = document.getElementById('feed-gas');
-      if (feedGas) feedGas.textContent = '$' + (2.50 + currentOilPrice * 0.0145).toFixed(2);
+    // Update feeds panel
+    const feedOil = document.getElementById('feed-oil-price');
+    if (feedOil) feedOil.textContent = '$' + currentOilPrice.toFixed(2);
+    const feedWti = document.getElementById('feed-wti');
+    if (feedWti && Number.isFinite(data.wti?.price)) feedWti.textContent = '$' + data.wti.price.toFixed(2);
+    const feedGas = document.getElementById('feed-gas');
+    if (feedGas) feedGas.textContent = '$' + (2.50 + currentOilPrice * 0.0145).toFixed(2);
 
-      // Update ticker Brent value
-      const tickerBrent = document.getElementById('ticker-brent');
-      if (tickerBrent) tickerBrent.textContent = '$' + currentOilPrice.toFixed(0) + ' /bbl';
+    // Update ticker Brent value
+    const tickerBrent = document.getElementById('ticker-brent');
+    if (tickerBrent) tickerBrent.textContent = '$' + currentOilPrice.toFixed(0) + ' /bbl';
 
-      // Update feed jet fuel
-      const feedJet = document.getElementById('feed-jet');
-      if (feedJet) feedJet.textContent = '$' + (currentOilPrice * 1.85).toFixed(0);
+    // Update feed jet fuel
+    const feedJet = document.getElementById('feed-jet');
+    if (feedJet) feedJet.textContent = '$' + (currentOilPrice * 1.85).toFixed(0);
 
-      // Refresh calculator with new oil baseline
-      if (typeof updateCalculator === 'function') updateCalculator();
+    // Refresh calculator with new oil baseline
+    if (typeof updateCalculator === 'function') updateCalculator();
 
-      // Update sparkline if history available
-      if (data.brent.history?.length > 5) {
-        setTimeout(() => drawSparkline('chart-oil', data.brent.history, '#ff3b3b'), 100);
-      }
-
-      console.log('[HormuzTracker] Oil prices updated: Brent $' + currentOilPrice.toFixed(2));
-      document.getElementById('data-status').textContent = '◉ LIVE';
-      document.getElementById('data-status').style.color = 'var(--green)';
+    // Update sparkline if history available
+    if (data.brent.history?.length > 5) {
+      setTimeout(() => drawSparkline('chart-oil', data.brent.history, '#ff3b3b'), 100);
     }
+
+    console.log('[HormuzTracker] Oil prices updated: Brent $' + currentOilPrice.toFixed(2));
+    lastOilData = data;
+    setOilStatus('API QUOTE', 'var(--green)', 'Worker fetched at: ' + (data.updated || 'unknown'));
   } catch (e) {
-    console.log('[HormuzTracker] Oil API unavailable, using simulation. ' + e.message);
-    if (!apiConnected) simulateOilPrice(); // fallback
+    console.warn('[HormuzTracker] Oil refresh failed: ' + e.message);
+    if (lastOilData) {
+      setOilStatus('STALE', 'var(--amber)', 'Last successful Worker fetch: ' + (lastOilData.updated || 'unknown'));
+    } else {
+      simulateOilPrice();
+      setOilStatus('SIMULATED', 'var(--amber)', 'Illustrative values. Oil API unavailable.');
+    }
   }
 }
 
@@ -1416,12 +1423,9 @@ function simulateOilPrice() {
 fetchLiveOil();
 fetchLiveNews();
 
-// Auto-refresh: oil every 5 min, news every 15 min, simulation every 4s as visual fallback
+// Auto-refresh oil every 5 minutes and news every 15 minutes.
 setInterval(fetchLiveOil, 300000);    // 5 minutes
 setInterval(fetchLiveNews, 900000);   // 15 minutes
-setInterval(() => {
-  if (!apiConnected) simulateOilPrice(); // only simulate if API never connected
-}, 4000);
 
 // ===== THREE.JS GLOBE =====
 let scene,camera,renderer,globe,markersArr=[],mouseDown=false,mouseX=0,mouseY=0,mouseDownX=0,mouseDownY=0,rotVelY=.0015,hoveredMarker=null,pulseTime=0,pulseRings=[],globePaused=false;
