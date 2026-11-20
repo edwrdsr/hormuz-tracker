@@ -38,7 +38,7 @@ export default {
 };
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data), { status, headers: CORS_HEADERS });
+  return new Response(JSON.stringify(data), { status, headers: { ...CORS_HEADERS, ...(status >= 400 && { 'Cache-Control': 'no-store' }) } });
 }
 
 // ===== OIL PRICES =====
@@ -47,9 +47,10 @@ async function getOilPrices(env) {
   // Try cache first
   if (env.CACHE) {
     const cached = await env.CACHE.get('oil', 'json');
-    if (cached) return json(cached);
+    if (Number.isFinite(cached?.brent?.price)) return json(cached);
   }
-  return json(await fetchAndCacheOil(env));
+  const oil = await fetchAndCacheOil(env);
+  return oil ? json(oil) : json({ error: 'Brent quote unavailable' }, 503);
 }
 
 async function fetchAndCacheOil(env) {
@@ -60,13 +61,13 @@ async function fetchAndCacheOil(env) {
     try {
       const res = await fetch(
         `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1mo`,
-        { headers: { 'User-Agent': 'HormuzTracker/1.0' } }
+        { headers: { 'User-Agent': 'HormuzTracker/1.0' }, signal: AbortSignal.timeout(2000) }
       );
       if (res.ok) {
         const data = await res.json();
         const meta = data.chart?.result?.[0]?.meta;
         const closes = data.chart?.result?.[0]?.indicators?.quote?.[0]?.close;
-        if (meta) {
+        if (Number.isFinite(meta?.regularMarketPrice)) {
           results[name] = {
             price: meta.regularMarketPrice,
             previous_close: meta.chartPreviousClose,
@@ -82,6 +83,11 @@ async function fetchAndCacheOil(env) {
     } catch (e) {
       results[name] = { error: e.message };
     }
+  }
+
+  if (!results.brent) {
+    console.warn(JSON.stringify({ event: 'oil_refresh_failed', reason: 'brent_unavailable' }));
+    return null;
   }
 
   // Pre-war baseline for context
